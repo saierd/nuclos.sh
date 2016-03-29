@@ -1,0 +1,11 @@
+url="http://localhost:80"
+instance="nuclos"
+
+user="nuclos"
+password=""
+
+postgresql_url="localhost:5432"
+postgresql_user="nuclos"
+postgresql_password="nuclos"
+postgresql_database="nuclos"
+postgresql_schema="nuclos"
