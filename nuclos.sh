@@ -20,7 +20,7 @@ CONFIGURATION_FILE="nuclos.xml"
 # Credentials for the Nuclos FTP server.
 readonly NUCLOS_FTP="ftp.nuclos.de"
 readonly NUCLOS_FTP_USER="nightly"
-readonly NUCLOS_FTP_PASSWORD=""
+NUCLOS_FTP_PASSWORD=""
 
 default_configuration() {
     echo "<?xml version=\"1.0\"?>
@@ -141,6 +141,8 @@ download_nuclos() {
     version="$1"
     target_file="$2"
 
+    ftp_jar_file="nuclos-${version}-installer-generic.jar"
+
     if [ ! -f ${target_file} ]; then
         info "Downloading the Nuclos installer."
         if ! curl --fail --output ${installer_file} ftp://${NUCLOS_FTP_USER}:${NUCLOS_FTP_PASSWORD}@${NUCLOS_FTP}/nuclos-${version}/${ftp_jar_file}; then
@@ -164,8 +166,6 @@ install_nuclos() {
     check_configuration
 
     installer_file="nuclos-installer-${version}.jar"
-    # TODO: Put this variable into the download function.
-    ftp_jar_file="nuclos-${version}-installer-generic.jar"
 
     if download_nuclos ${version} ${installer_file}; then
         info "Installing Nuclos."
@@ -346,6 +346,7 @@ read_configuration_file() {
             postgresql_password=
             postgresql_database=
             postrgesql_schema=
+            nuclos_ftp_password=
 
             # Read the configuration file.
             source "${filename}"
@@ -379,6 +380,9 @@ read_configuration_file() {
             fi
             if [ -n "${postgresql_schema}" ]; then
                 POSTGRESQL_SCHEMA="${postgresql_schema}"
+            fi
+            if [ -n "${nuclos_ftp_password}" ]; then
+                NUCLOS_FTP_PASSWORD="${nuclos_ftp_password}"
             fi
         else
             error "Configuration file contains code. Not reading it."
